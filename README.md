@@ -1,64 +1,156 @@
-# Klimat22 heating equipment store
+# Климат22 — интернет-магазин отопительного оборудования
 
-A commissioned e-commerce project for a heating equipment store. I was the
-only developer. A designer was involved separately.
+Коммерческий проект для магазина отопительного оборудования в Барнауле. Покупатели выбирают товары и оформляют заявки; менеджеры управляют каталогом, заказами и обращениями.
 
-**Project activity:** September 2025 to March 2026
+Я был единственным разработчиком: согласовывал требования с заказчиком, привлёк дизайнера и разработал frontend и backend. Работа по договору: **сентябрь 2025 — март 2026**.
 
-**Current status:** Klimat22 is currently unavailable and has no live demo.
+Магазин прекратил работу. Проект сохранён в портфолио и запущен как демо с тестовыми товарами, заявками и аккаунтом менеджера.
 
-## What I built
+## Демо и видео
 
-- Product catalog with categories, brands, filters, search, variants, and
-  grouped items.
-- Catalog browsing, guest cart, checkout, and order creation.
-- Customer requests.
-- Manager panel for catalog items, orders, leads, users, categories, and
-  brands.
-- Convex schema and backend functions for the commerce domain.
-- Role checks for users, managers, and admins.
-- Server-side input validation and cart/order ownership checks.
-- Order item snapshots and protection against creating the same order twice
-  from one cart.
-- Data migration using a Convex export, local transformation, and import.
+- [Открыть демо](https://omarchy.tail089ef.ts.net:9443/) — доступ через сеть Tailscale владельца.
+- [Посмотреть видео — 1 минута 59 секунд](https://github.com/GitHubFoxy/Klimat22/blob/main/assets/demo/walkthrough.mp4): витрина → каталог и фильтры → оформление заявки → кабинет менеджера → подтверждение заказа.
+- [Вход менеджера](https://omarchy.tail089ef.ts.net:9443/auth/signin): телефон `80000000000`, пароль `Klimat22-Demo-2026`.
 
-Online payments are not integrated. The checkout stores a payment method and
-status, but it does not process card payments.
+В демо используются вымышленные данные. Продажа, оплата и доставка не выполняются. Для проверки оформления заявки используйте вымышленные имя, телефон и адрес.
 
-## Architecture
+## Что разработал
+
+- Каталог с категориями, брендами, поиском, фильтрами и вариантами товаров.
+- Гостевую корзину, оформление заявок и страницу созданного заказа.
+- Форму обращения за консультацией.
+- Кабинет менеджеров: товары, заказы, обращения и пользователи; изменение статусов заказов.
+- Схему данных и серверные функции Convex.
+- Разграничение доступа по ролям, серверную валидацию и проверку принадлежности корзины и заказов.
+- Снимки названий и цен товаров в заказе; защиту от повторного создания заказа из одной корзины.
+- Миграцию схемы и данных через экспорт Convex, преобразование скриптами и импорт.
+- Развёртывание frontend и backend на двух VPS через PM2 в коммерческом проекте.
+
+## Стек
+
+TypeScript, React, Next.js App Router, Convex, Tailwind CSS, Radix UI, TanStack Table, pnpm, Biome.
+
+Демо размещено на Linux через Docker, systemd и Tailscale Serve.
+
+## Скриншоты
+
+### Витрина
+
+![Витрина](assets/demo/storefront.png)
+
+### Каталог с фильтрами
+
+![Фильтр по категории](assets/demo/catalog.png)
+
+### Корзина и оформление заявки
+
+![Оформление заявки](assets/demo/checkout.png)
+
+### Кабинет менеджера
+
+![Управление товарами](assets/demo/manager.png)
+
+### Управление заказами
+
+![Статусы заказов](assets/demo/orders.png)
+
+![Карточка заказа](assets/demo/order-details.png)
+
+## Архитектура
 
 ```mermaid
 flowchart LR
-    B[Browser] --> N[Next.js App Router]
-    N <--> C[Convex functions and database]
-    N --> M[Manager panel]
+    B[Браузер покупателя] --> N[Next.js / React]
+    M[Браузер менеджера] --> N
+    N <-->|Запросы, мутации, подписки| C[Convex]
+    C --> D[Каталог, корзины, заказы, пользователи]
+    C --> A[Convex Auth / роли]
+    C --> S[Файловое хранилище]
 ```
 
-- **Frontend:** Next.js App Router, React, TypeScript.
-- **Backend and data:** Convex functions, schema, queries, and mutations.
-- **UI:** Radix UI components and Tailwind CSS utilities.
-- **Operations:** A historical frontend/backend deployment used PM2 and a
-  Linux VPS. The self-hosting configuration is incomplete and a fresh run has
-  not been verified.
-- **Tooling:** pnpm, Biome, and TypeScript.
+- `app/` — витрина, каталог, оформление заявки, страницы заказов и кабинет менеджера.
+- `components/` — компоненты интерфейса.
+- `convex/` — схема, запросы, мутации, авторизация и миграции.
+- `backend/` — Docker Compose для self-hosted Convex и systemd-служба демо.
+- `convex/demo.ts` — внутренние функции заполнения новой демо-базы; доступны через административный ключ. Запуск требует `DEMO_MODE=true` и пустой базы.
 
-## Local setup
+## Запуск с нуля
 
-The repository expects Node.js, pnpm, the Convex CLI, and environment
-configuration such as `.env.local`. Existing scripts cover development,
-Biome checks, TypeScript checks, and builds. A fresh install and run have not
-been verified. Automated tests are not available yet.
+Нужны Node.js 22+, pnpm **10.32.1** и работающий Docker с Docker Compose. Установка, проверка TypeScript, сборка и запуск демо проверены на Linux. Convex Auth для self-hosted backend настраивается по [официальной инструкции](https://labs.convex.dev/auth/setup/manual).
 
-## Scope and limitations
+### 1. Зависимости и отдельный backend
 
-- Cart merging after sign-in is unfinished.
-- The self-hosting files are configuration notes, not a verified deployment
-  recipe.
+```bash
+git clone https://github.com/GitHubFoxy/Klimat22.git
+cd Klimat22
+pnpm install --frozen-lockfile
+cp .env.example .env.local
+```
 
-## Repository areas
+В `.env.local` установите `NEXT_PUBLIC_DEMO_MODE=true`. Начальные адреса в примере предназначены для локального запуска.
 
-- `app/`: storefront, checkout, order pages, and manager routes
-- `components/`: shared UI and feature components
-- `convex/`: schema, queries, mutations, auth helpers, and migrations
-- `backend/`: self-hosting configuration template
-- `ecosystem.config.js`: PM2 process definition
+```bash
+docker compose --env-file .env.local -p klimat22-demo \
+  -f backend/docker-compose.yml.convex up -d backend
+```
+
+Получите ключ и сохраните его в переменную `CONVEX_SELF_HOSTED_ADMIN_KEY` файла `.env.local`:
+
+```bash
+docker compose --env-file .env.local -p klimat22-demo \
+  -f backend/docker-compose.yml.convex exec backend ./generate_admin_key.sh
+```
+
+Административный ключ и JWT-ключи хранятся в окружении и не публикуются. Docker сохраняет данные в отдельном volume `klimat22-demo_data`.
+
+### 2. Авторизация, схема и тестовые данные
+
+```bash
+node scripts/configure-demo-auth.mjs
+pnpm exec convex dev --once
+pnpm exec convex run demo:setup '{"password":"Klimat22-Demo-2026"}'
+```
+
+Функция создаёт 12 товаров в трёх категориях, один тестовый бренд и аккаунт менеджера `80000000000`. Повторное заполнение непустой базы отклоняется.
+
+### 3. Frontend
+
+```bash
+pnpm typecheck
+node scripts/check-demo.mjs
+pnpm build
+pnpm start
+```
+
+Откройте `http://localhost:3000`. Для разработки frontend используйте `pnpm dev:frontend`.
+
+### 4. Демо через Tailscale на Omarchy
+
+Текущий каталог демо: `~/projects/klimat22-demo`. В `.env.local` CLI использует локальный backend `http://127.0.0.1:3290`, а браузер — `NEXT_PUBLIC_CONVEX_URL=https://omarchy.tail089ef.ts.net:9444` и `NEXT_PUBLIC_CONVEX_SITE_URL=https://omarchy.tail089ef.ts.net:9445`. После `convex dev --once` восстановите эти два публичных адреса: CLI записывает локальные значения в `.env.local`.
+
+Для Compose в `.env` заданы:
+
+```dotenv
+PORT=3290
+SITE_PROXY_PORT=3291
+CONVEX_CLOUD_ORIGIN=https://omarchy.tail089ef.ts.net:9444
+CONVEX_SITE_ORIGIN=https://omarchy.tail089ef.ts.net:9445
+```
+
+```bash
+docker compose --env-file .env -p klimat22-demo \
+  -f backend/docker-compose.yml.convex up -d backend
+
+tailscale serve --https=9443 --bg http://127.0.0.1:3090
+tailscale serve --https=9444 --bg http://127.0.0.1:3290
+tailscale serve --https=9445 --bg http://127.0.0.1:3291
+
+mkdir -p ~/.config/systemd/user
+cp backend/klimat22-demo.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now klimat22-demo.service
+```
+
+Если firewall блокирует обращение Docker к хосту, разрешите сети `klimat22-demo_default` доступ к адресу хоста только на TCP-порту `9445`: Convex получает оттуда конфигурацию авторизации и публичный ключ. Адреса и порт можно изменить под свою сеть.
+
+Демо возвращает `200`; проверены фильтрация каталога, создание заявки, вход менеджера, просмотр заказа и изменение его статуса. В демо закрыта выдача старых JSON-файлов импорта из `public/`.

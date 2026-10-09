@@ -41,9 +41,22 @@ const authMiddleware = convexAuthNextjsMiddleware(
 )
 
 export function proxy(request: NextRequest, event?: NextFetchEvent) {
+  if (
+    process.env.NEXT_PUBLIC_DEMO_MODE === 'true' &&
+    /^\/(seed.*|data1part|test)\.json$/.test(request.nextUrl.pathname)
+  ) {
+    return new NextResponse(null, { status: 404 })
+  }
   return authMiddleware(request, event || ({} as NextFetchEvent))
 }
 
 export const config = {
-  matcher: ['/manager(.*)', '/auth(.*)', '/(api|trpc)(.*)'],
+  matcher: [
+    '/manager(.*)',
+    '/auth(.*)',
+    '/(api|trpc)(.*)',
+    '/seed(.*)',
+    '/data1part.json',
+    '/test.json',
+  ],
 }

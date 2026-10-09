@@ -1,0 +1,16 @@
+[Unit]
+Description=Klimat22 portfolio demo
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/projects/klimat22-demo
+Environment=NODE_ENV=production
+Environment=NEXT_TELEMETRY_DISABLED=1
+ExecStart=/usr/bin/env pnpm exec next start --hostname 127.0.0.1 --port 3090
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

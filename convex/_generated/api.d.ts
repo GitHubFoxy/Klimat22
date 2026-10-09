@@ -17,6 +17,7 @@ import type * as collection_groups_manager from "../collection_groups_manager.js
 import type * as consultants from "../consultants.js";
 import type * as dashboard from "../dashboard.js";
 import type * as debug from "../debug.js";
+import type * as demo from "../demo.js";
 import type * as export_ from "../export.js";
 import type * as http from "../http.js";
 import type * as import_ from "../import.js";
@@ -48,6 +49,7 @@ declare const fullApi: ApiFromModules<{
   consultants: typeof consultants;
   dashboard: typeof dashboard;
   debug: typeof debug;
+  demo: typeof demo;
   export: typeof export_;
   http: typeof http;
   import: typeof import_;

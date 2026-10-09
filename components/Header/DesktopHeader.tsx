@@ -4,7 +4,7 @@ import { MapPin, Phone } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { telegramLink, whatsappLink } from '@/lib/consts'
+import { isDemo, telegramLink, whatsappLink } from '@/lib/consts'
 import { cn } from '@/lib/utils'
 import Cart from '../Cart/HeaderCart'
 import { Button } from '../ui/button'
@@ -40,7 +40,10 @@ export const DesktopHeader = ({ PhoneNumber }: { PhoneNumber: string }) => {
       <div className='flex flex-row justify-between items-center py-4 border-b-2'>
         <HeaderSearch />
         <div className='flex gap-6 items-center'>
-          <Link href={'https://yandex.ru/maps/-/CLRjzI5Q'} target='_blank'>
+          <Link
+            href={isDemo ? '#' : 'https://yandex.ru/maps/-/CLRjzI5Q'}
+            target='_blank'
+          >
             <div className='flex gap-2 hover:cursor-pointer'>
               <MapPin />
               <p className='font-inter font-normal'>Барнаул</p>

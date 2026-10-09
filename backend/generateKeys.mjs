@@ -1,10 +1,10 @@
-import { exportJWK, exportPKCS8, generateKeyPair } from 'jose'
+import { generateKeyPairSync } from 'node:crypto'
 
-const keys = await generateKeyPair('RS256', {
-  extractable: true,
+const keys = generateKeyPairSync('rsa', {
+  modulusLength: 2048,
 })
-const privateKey = await exportPKCS8(keys.privateKey)
-const publicKey = await exportJWK(keys.publicKey)
+const privateKey = keys.privateKey.export({ type: 'pkcs8', format: 'pem' })
+const publicKey = keys.publicKey.export({ format: 'jwk' })
 const jwks = JSON.stringify({ keys: [{ use: 'sig', ...publicKey }] })
 
 process.stdout.write(

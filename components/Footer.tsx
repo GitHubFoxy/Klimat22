@@ -11,14 +11,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { CompanyName, Email, FullAdress, INN, Phone } from '@/lib/consts'
+import {
+  CompanyName,
+  Email,
+  FullAdress,
+  INN,
+  isDemo,
+  Phone,
+} from '@/lib/consts'
 
 export const Footer = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
     // Load iframe after page load completes
-    if (iframeRef.current && !iframeRef.current.src) {
+    if (!isDemo && iframeRef.current && !iframeRef.current.src) {
       iframeRef.current.src =
         'https://yandex.ru/map-widget/v1/?um=constructor%3Ab57356a7883ee85d673978b787538bb1a0fc9325d417456173c7d9a6a6c9b740&source=constructor'
     }

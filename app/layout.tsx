@@ -41,6 +41,13 @@ export default function RootLayout({
           )}
         </head>
         <body className={`antialiased`} suppressHydrationWarning>
+          {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' && (
+            <div className='bg-amber-100 px-4 py-3 text-center text-sm text-amber-950'>
+              Демо проекта Климат22. Магазин прекратил работу. Товары и заявки
+              тестовые, продажа и доставка не выполняются. Используйте
+              вымышленные контактные данные.
+            </div>
+          )}
           <AppProviders>{children}</AppProviders>
         </body>
       </html>

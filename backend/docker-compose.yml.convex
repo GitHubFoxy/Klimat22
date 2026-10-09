@@ -1,87 +1,15 @@
-# Must add .env 
-# https://github.com/get-convex/convex-backend/blob/main/self-hosted/advanced/hosting_on_own_infra.md
-
-
+# Run from the repository root with docker compose -f backend/docker-compose.yml.convex up -d
+# For a public demo, proxy the API and HTTP actions through the host reverse proxy.
 services:
   backend:
-    image: ghcr.io/get-convex/convex-backend:latest
-    stop_grace_period: 10s
-    stop_signal: SIGINT
-    ports:
-      - 3210:3210
-      - 3211:3211
-    volumes:
-      - data:/convex/data
-    environment:
-      - ACTIONS_USER_TIMEOUT_SECS
-      - AWS_ACCESS_KEY_ID
-      - AWS_REGION
-      - AWS_S3_DISABLE_CHECKSUMS
-      - AWS_S3_DISABLE_SSE
-      - AWS_S3_FORCE_PATH_STYLE
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_SESSION_TOKEN
-      - CONVEX_CLOUD_ORIGIN=https://api.klimat22.com
-      - CONVEX_RELEASE_VERSION_DEV
-      - CONVEX_SITE_ORIGIN=https://callback.klimat22.com
-      - CONVEX_TRUSTED_ORIGINS=https://dashboard.klimat22.com
-      - DATABASE_URL
-      - DISABLE_BEACON
-      - DOCUMENT_RETENTION_DELAY=172800
-      - DO_NOT_REQUIRE_SSL
-services:
-  backend:
-    image: ghcr.io/get-convex/convex-backend:latest
-    stop_grace_period: 10s
-    stop_signal: SIGINT
-    ports:
-      - 3210:3210
-      - 3211:3211
-    volumes:
-      - data:/convex/data
-    environment:
-      - ACTIONS_USER_TIMEOUT_SECS
-      - AWS_ACCESS_KEY_ID
-      - AWS_REGION
-      - AWS_S3_DISABLE_CHECKSUMS
-      - AWS_S3_DISABLE_SSE
-      - AWS_S3_FORCE_PATH_STYLE
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_SESSION_TOKEN
-      - CONVEX_CLOUD_ORIGIN=https://api.klimat22.com
-      - CONVEX_RELEASE_VERSION_DEV
-      - CONVEX_SITE_ORIGIN=https://callback.klimat22.com
-seVrvices:
-  backend:
-    image: ghcr.io/get-convex/convex-backend:latest
-    stop_grace_period: 10s
-    stop_signal: SIGINT
-    ports:
-      - 3210:3210
-      - 3211:3211
-    volumes:
-      - data:/convex/data
-    environment:
-      - ACTIONS_USER_TIMEOUT_SECS
-      - AWS_ACCESS_KEY_ID
-      - AWS_REGION
-      - AWS_S3_DISABLE_CHECKSUMS
-      - AWS_S3_DISABLE_SSE
-      - AWS_S3_FORCE_PATH_STYLE
-      - AWS_SECRET_ACCESS_KEY
-services:
-    ports:
-      - ACTIONS_USER_TIMEOUT_SECS
-      - AWS_ACCESS_KEY_ID
-services:
-  backend:
+    restart: unless-stopped
     # Change this to :${REV} if you want to pin to a specific version
     image: ghcr.io/get-convex/convex-backend:latest
     stop_grace_period: 10s
     stop_signal: SIGINT
     ports:
-      - "${PORT:-3210}:3210"
-      - "${SITE_PROXY_PORT:-3211}:3211"
+      - "127.0.0.1:${PORT:-3210}:3210"
+      - "127.0.0.1:${SITE_PROXY_PORT:-3211}:3211"
     volumes:
       - data:/convex/data
     environment:
@@ -126,25 +54,13 @@ services:
     stop_grace_period: 10s
     stop_signal: SIGINT
     ports:
-      - "${DASHBOARD_PORT:-6791}:6791"
+      - "127.0.0.1:${DASHBOARD_PORT:-6791}:6791"
     environment:
       - NEXT_PUBLIC_DEPLOYMENT_URL=${NEXT_PUBLIC_DEPLOYMENT_URL:-http://127.0.0.1:${PORT:-3210}}
       - NEXT_PUBLIC_LOAD_MONACO_INTERNALLY
     depends_on:
       backend:
         condition: service_healthy
-
-  caddy:
-    image: docker.io/caddy:alpine
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-    depends_on:
-      - backend
-      - dashboard
 
 volumes:
   data:
