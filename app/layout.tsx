@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 import Script from 'next/script'
 import './globals.css'
 import { ConvexAuthNextjsServerProvider } from '@convex-dev/auth/nextjs/server'
 import { Description, Icon, Title } from '@/lib/consts'
 import { AppProviders } from './providers'
 
-const inter = Inter({
-  subsets: ['cyrillic', 'latin'],
+const inter = localFont({
+  src: './fonts/Inter.ttf',
   variable: '--font-inter',
 })
 
