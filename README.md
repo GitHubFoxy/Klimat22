@@ -1,16 +1,26 @@
 # Климат22 — интернет-магазин отопительного оборудования
 
+<a href="https://githubfoxy.github.io/Klimat22/"><img src="assets/demo/storefront.png" alt="Витрина интернет-магазина Климат22" width="100%"></a>
+
+<table>
+<tr>
+<td width="33%"><a href="assets/demo/catalog.png"><img src="assets/demo/catalog.png" alt="Каталог с фильтрами"></a></td>
+<td width="33%"><a href="assets/demo/checkout.png"><img src="assets/demo/checkout.png" alt="Корзина и оформление заявки"></a></td>
+<td width="33%"><a href="assets/demo/orders.png"><img src="assets/demo/orders.png" alt="Управление заказами"></a></td>
+</tr>
+</table>
+
+[Все скриншоты и видео](https://githubfoxy.github.io/Klimat22/) · [Кабинет менеджера](assets/demo/manager.png) · [Карточка заказа](assets/demo/order-details.png)
+
 Коммерческий проект для магазина отопительного оборудования в Барнауле. Покупатели выбирают товары и оформляют заявки; менеджеры управляют каталогом, заказами и обращениями.
 
 Я был единственным разработчиком: согласовывал требования с заказчиком, привлёк дизайнера и разработал frontend и backend. Работа по договору: **сентябрь 2025 — март 2026**.
 
-Магазин прекратил работу. Проект сохранён в портфолио и запущен как демо с тестовыми товарами, заявками и аккаунтом менеджера.
+Для портфолио запущено демо с тестовыми товарами, заявками и аккаунтом менеджера.
 
 ## Демо и видео
 
-- [Открыть демо](https://omarchy.tail089ef.ts.net:9443/) — доступ через сеть Tailscale владельца.
 - [Посмотреть видео — 1 минута 59 секунд, 756 КБ](https://githubfoxy.github.io/Klimat22/): витрина → каталог и фильтры → оформление заявки → кабинет менеджера → подтверждение заказа.
-- [Вход менеджера](https://omarchy.tail089ef.ts.net:9443/auth/signin): телефон `80000000000`, пароль `Klimat22-Demo-2026`.
 
 В демо используются вымышленные данные. Продажа, оплата и доставка не выполняются. Для проверки оформления заявки используйте вымышленные имя, телефон и адрес.
 
@@ -31,30 +41,6 @@
 TypeScript, React, Next.js App Router, Convex, Tailwind CSS, Radix UI, TanStack Table, pnpm, Biome.
 
 Демо размещено на Linux через Docker, systemd и Tailscale Serve.
-
-## Скриншоты
-
-### Витрина
-
-![Витрина](assets/demo/storefront.png)
-
-### Каталог с фильтрами
-
-![Фильтр по категории](assets/demo/catalog.png)
-
-### Корзина и оформление заявки
-
-![Оформление заявки](assets/demo/checkout.png)
-
-### Кабинет менеджера
-
-![Управление товарами](assets/demo/manager.png)
-
-### Управление заказами
-
-![Статусы заказов](assets/demo/orders.png)
-
-![Карточка заказа](assets/demo/order-details.png)
 
 ## Архитектура
 
